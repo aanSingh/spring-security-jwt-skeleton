@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,17 @@ public class JWTServiceImp implements JWTService {
   public boolean isTokenValid(String token, UserDetails userDetails) {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+  }
+
+  @Override
+  public String generateRefreshToken(Map<String, Object> extraClaims, UserDetails user) {
+    return Jwts.builder()
+            .claims(extraClaims)
+            .subject(user.getUsername())
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + 604800000))
+            .signWith(getSignInKey())
+            .compact();
   }
 
   private boolean isTokenExpired(String token) {

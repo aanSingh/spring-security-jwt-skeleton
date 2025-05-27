@@ -1,5 +1,7 @@
 package com.ecommerce.springboot_ecommerce_api.controller;
 
+import com.ecommerce.springboot_ecommerce_api.dto.LogInRequest;
+import com.ecommerce.springboot_ecommerce_api.dto.LogInResponse;
 import com.ecommerce.springboot_ecommerce_api.dto.SignUpRequest;
 import com.ecommerce.springboot_ecommerce_api.entity.User;
 import com.ecommerce.springboot_ecommerce_api.service.AuthenticationService;
@@ -18,5 +20,10 @@ public class AuthController {
   @RequestMapping("/signup")
   public ResponseEntity<User> signup(@RequestBody SignUpRequest signUpRequest) {
     return ResponseEntity.ok(authenticationService.signUp(signUpRequest));
+  }
+
+  @RequestMapping("/login")
+  public ResponseEntity<LogInResponse> login(@RequestBody LogInRequest logInRequest) {
+    return ResponseEntity.ok(authenticationService.logIn(logInRequest));
   }
 }
