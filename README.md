@@ -1,1 +1,1 @@
-# springboot-ecommerce-api
+# spring-security-jwt-skeleton
