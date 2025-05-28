@@ -2,6 +2,7 @@ package com.ecommerce.springboot_ecommerce_api.controller;
 
 import com.ecommerce.springboot_ecommerce_api.dto.LogInRequest;
 import com.ecommerce.springboot_ecommerce_api.dto.LogInResponse;
+import com.ecommerce.springboot_ecommerce_api.dto.RefreshTokenRequest;
 import com.ecommerce.springboot_ecommerce_api.dto.SignUpRequest;
 import com.ecommerce.springboot_ecommerce_api.entity.User;
 import com.ecommerce.springboot_ecommerce_api.service.AuthenticationService;
@@ -25,5 +26,10 @@ public class AuthController {
   @RequestMapping("/login")
   public ResponseEntity<LogInResponse> login(@RequestBody LogInRequest logInRequest) {
     return ResponseEntity.ok(authenticationService.logIn(logInRequest));
+  }
+
+  @RequestMapping("/refresh")
+  public ResponseEntity<LogInResponse> login(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
   }
 }

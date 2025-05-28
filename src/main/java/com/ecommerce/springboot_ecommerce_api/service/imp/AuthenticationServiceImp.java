@@ -2,6 +2,7 @@ package com.ecommerce.springboot_ecommerce_api.service.imp;
 
 import com.ecommerce.springboot_ecommerce_api.dto.LogInRequest;
 import com.ecommerce.springboot_ecommerce_api.dto.LogInResponse;
+import com.ecommerce.springboot_ecommerce_api.dto.RefreshTokenRequest;
 import com.ecommerce.springboot_ecommerce_api.dto.SignUpRequest;
 import com.ecommerce.springboot_ecommerce_api.entity.CustomUserDetails;
 import com.ecommerce.springboot_ecommerce_api.entity.Role;
@@ -65,5 +66,25 @@ public class AuthenticationServiceImp implements AuthenticationService {
     logInResponse.setRefreshToken(refreshToken);
 
     return logInResponse;
+  }
+
+  @Override
+  public LogInResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+    String userEmail = jwtService.extractUsername(refreshTokenRequest.getToken());
+
+    User user =
+        userRepository
+            .findByEmail(userEmail)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+
+    if (jwtService.isTokenValid(refreshTokenRequest.getToken(), new CustomUserDetails(user))) {
+      String token = jwtService.generateToken(new CustomUserDetails(user));
+
+      LogInResponse logInResponse = new LogInResponse();
+      logInResponse.setToken(token);
+      logInResponse.setRefreshToken(refreshTokenRequest.getToken());
+      return logInResponse;
+    }
+    return null;
   }
 }
